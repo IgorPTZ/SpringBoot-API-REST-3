@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Entity
 public class Usuario implements UserDetails {
@@ -36,8 +37,26 @@ public class Usuario implements UserDetails {
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuarios_role", uniqueConstraints = @UniqueConstraint (
-			columnNames = {"usuario_id", "role_id"}, name = "unique_role"))
-	private List<Role> roles;
+			columnNames = {"usuario_id", "role_id"}, name = "unique_role"),
+			joinColumns = @JoinColumn(
+					name = "usuario_id",
+					referencedColumnName = "id",
+					table = "usuario",
+					unique = false,
+					foreignKey = @ForeignKey(
+							name = "usuario_fk",
+							value = ConstraintMode.CONSTRAINT)),
+			inverseJoinColumns = @JoinColumn(
+					name = "role_id",
+					referencedColumnName = "id",
+					table = "role",
+					unique = false,
+					updatable = false,
+					foreignKey = @ForeignKey(
+							name = "role_fk",
+							value = ConstraintMode.CONSTRAINT))
+	)
+	private List<Role> roles = new ArrayList<>();
 	
 	public Long getId() {
 		return id;
