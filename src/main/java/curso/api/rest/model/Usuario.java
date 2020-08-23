@@ -36,7 +36,7 @@ public class Usuario implements UserDetails {
 	
 	private String nome;
 	
-	@OneToMany(mappedBy="usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="usuario", orphanRemoval = true, cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Telefone> telefones = new ArrayList<>();
 	
 	@OneToMany(fetch = FetchType.EAGER)
@@ -132,7 +132,7 @@ public class Usuario implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		return null;
+		return roles;
 	}
 
 	@Override
