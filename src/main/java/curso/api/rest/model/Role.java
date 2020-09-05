@@ -29,7 +29,6 @@ public class Role implements GrantedAuthority {
 	/* Retorna o nome da Role. Ex: ROLE_GERENTE */
 	@Override
 	public String getAuthority() { 
-		
 		return this.nomeRole;
 	}
 

@@ -20,7 +20,7 @@ public class ImplementacaoUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		/* Consulta no bando de dados o usuario */
+		/* Consulta no banco de dados o usuario */
 		
 		Usuario usuario = usuarioRepository.findUserByLogin(username);
 		

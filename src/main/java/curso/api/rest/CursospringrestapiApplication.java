@@ -31,7 +31,7 @@ public class CursospringrestapiApplication implements WebMvcConfigurer{
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		
-		/* Utilizando o CORS para liberar apenas requisições POST e PUT para o cliente localhost:8080 */
+		/* Utilizando o CORS para liberar apenas requisições POST, PUT e GET para o cliente localhost:8080 */
 		registry.addMapping("/usuario/**").
 		allowedMethods("POST", "PUT", "GET"). 
 		allowedOrigins("*");

@@ -20,7 +20,6 @@ import curso.api.rest.repository.UsuarioRepository;
 
 /* Arquitetura REST */
 
-// @CrossOrigin
 @RestController
 @RequestMapping(value = "/usuario")
 public class IndexController {
@@ -29,10 +28,8 @@ public class IndexController {
 	private UsuarioRepository usuarioRepository;
 	
 	/* Serviço RESTful */
-	// @CrossOrigin
 	@GetMapping(value = "/{id}/codigo/{venda}", produces = "application/json")
-	public ResponseEntity<Usuario> obterRelatorio(@PathVariable (value = "id") Long id
-											,@PathVariable (value = "venda") Long venda) {
+	public ResponseEntity<Usuario> obterRelatorio(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 
@@ -40,9 +37,6 @@ public class IndexController {
 	}
 	
 	
-	/* Serviço RESTful */
-	
-	// @CrossOrigin
 	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<Usuario> obterUsuario(@PathVariable (value = "id") Long id) {
 		
@@ -52,7 +46,6 @@ public class IndexController {
 	}
 	
 	
-	// @CrossOrigin
 	@GetMapping(value="/", produces = "application/json")
 	public ResponseEntity<List<Usuario>> obterUsuarios() {
 		
@@ -62,7 +55,6 @@ public class IndexController {
 	}
 	
 	
-	// @CrossOrigin(origins = "localhost:8080")
 	@PostMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
 		
@@ -76,7 +68,6 @@ public class IndexController {
 	}
 	
 	
-	// @CrossOrigin
 	@PutMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Usuario> atualizarUsuario(@RequestBody Usuario usuario) {
 		
@@ -90,7 +81,6 @@ public class IndexController {
 	}
 	
 	
-	// @CrossOrigin(origins = "www.jdevtreinamento.com.br")
 	@DeleteMapping(value = "/{id}", produces = "application/text")
 	public String excluirUsuario(@PathVariable("id") Long id) {
 		
