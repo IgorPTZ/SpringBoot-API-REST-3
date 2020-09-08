@@ -1,14 +1,19 @@
 package curso.api.rest.security;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import curso.api.rest.ApplicationContextLoad;
+import curso.api.rest.model.Usuario;
+import curso.api.rest.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -30,7 +35,7 @@ public class JWTTokenAutenticacaoService {
 	
 	
 	/* Gerando token de autenticacao e adicionando ao cabeçalho e resposta Http */
-	public void addAuthentication(HttpServletResponse response, String username) throws Exception {
+	public void addAuthentication(HttpServletResponse response, String username) throws IOException {
 		
 		String JWT = Jwts.builder(). /* Chama o gerador de token */
 				setSubject(username). /* Adiciona o usuario */
@@ -58,20 +63,27 @@ public class JWTTokenAutenticacaoService {
 		
 		if(token != null) {
 			
+			/* Faz a validação do token do usuario na requisicao */
 			String user = Jwts.parser().setSigningKey(SECRET)
 						  .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
 						  .getBody().getSubject();
 			
 			if(user != null) {
 				
-			}
-			else {
-				return null; /* Retorno para usuario nao autorizado */
+				Usuario usuario = ApplicationContextLoad.getApplicationContext()
+								  .getBean(UsuarioRepository.class).findUserByLogin(user);
+				
+				if(usuario != null) {
+					
+					return new UsernamePasswordAuthenticationToken(usuario.getLogin(), 
+															       usuario.getSenha(), 
+															       usuario.getAuthorities());
+				}
+
 			}
 		}
-		else {
-			return null; /* Retorno para usuario nao autorizado */
-		}
+		
+		return null; /* Retorno para usuario nao autorizado */
 	}
 	
 }
