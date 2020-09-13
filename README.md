@@ -3,6 +3,7 @@
 Api Rest for learn follows technologies:
 
 - Spring
+- API Restful
 - JWT
 - Spring Security
 - JPA
