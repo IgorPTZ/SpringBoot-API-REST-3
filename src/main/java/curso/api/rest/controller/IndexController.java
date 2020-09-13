@@ -29,19 +29,25 @@ public class IndexController {
 	private UsuarioRepository usuarioRepository;
 	
 	/* Serviço RESTful */
-	@GetMapping(value = "/{id}/codigo/{venda}", produces = "application/json")
-	public ResponseEntity<Usuario> obterRelatorio(@PathVariable (value = "id") Long id) {
+	
+	/* Versionamento de API */
+	@GetMapping(value = "v1/{id}", produces = "application/json")
+	public ResponseEntity<Usuario> obterUsuarioV1(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
+		
+		System.out.println("Old version, for most clients");
 
 		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
 	}
 	
-	
-	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Usuario> obterUsuario(@PathVariable (value = "id") Long id) {
+	/* Versionamento de API */
+	@GetMapping(value = "v2/{id}", produces = "application/json")
+	public ResponseEntity<Usuario> obterUsuarioV2(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
+		
+		System.out.println("New version, only some clients");
 
 		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
 	}
@@ -79,6 +85,16 @@ public class IndexController {
 		
 		for(int i = 0; i < usuario.getTelefones().size(); i ++) {
 			usuario.getTelefones().get(i).setUsuario(usuario);
+		}
+		
+		Usuario aux = usuarioRepository.findUserByLogin(usuario.getLogin());
+		
+		/* Caso a senha enviada seja diferente a que se encontra no banco de dados, havera 
+		 * uma atualizacao de senha, e a nova senha sera criptografada e salva no banco de dados */
+		if(!aux.getSenha().equals(usuario.getSenha())) {
+			
+			String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
+			usuario.setSenha(senhaCriptografada);
 		}
 		
 		Usuario usuarioAtualizado = usuarioRepository.save(usuario);
