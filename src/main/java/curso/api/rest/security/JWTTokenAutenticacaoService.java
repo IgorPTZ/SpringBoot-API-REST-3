@@ -21,7 +21,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JWTTokenAutenticacaoService {
 	
-	/* Tempo de validade do token */
+	/* Tempo de validade do token - 2 dias */
 	private static final long EXPIRATION_TIME = 172800000;
 	
 	/* Uma senha unica para compor a autenticacao e ajudar na segurança */
@@ -64,14 +64,18 @@ public class JWTTokenAutenticacaoService {
 		if(token != null) {
 			
 			/* Faz a validação do token do usuario na requisicao */
-			String user = Jwts.parser().setSigningKey(SECRET)
+			String user = Jwts.parser()
+					      .setSigningKey(SECRET)
 						  .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-						  .getBody().getSubject();
+						  .getBody()
+						  .getSubject();
 			
 			if(user != null) {
 				
-				Usuario usuario = ApplicationContextLoad.getApplicationContext()
-								  .getBean(UsuarioRepository.class).findUserByLogin(user);
+				Usuario usuario = ApplicationContextLoad
+						          .getApplicationContext()
+								  .getBean(UsuarioRepository.class)
+								  .findUserByLogin(user);
 				
 				if(usuario != null) {
 					

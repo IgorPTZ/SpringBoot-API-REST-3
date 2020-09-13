@@ -21,6 +21,7 @@ public class Telefone implements Serializable{
 	
 	private String numero;
 	
+	@SuppressWarnings("deprecation")
 	@JsonIgnore
 	@org.hibernate.annotations.ForeignKey(name = "usuario_id")
 	@ManyToOne(optional = false)
