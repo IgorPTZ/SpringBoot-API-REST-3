@@ -2,8 +2,9 @@
 
 Api Rest for test and practice follows technologies:
 
-- Spring 2
+- Spring
 - JWT
 - Spring Security
 - JPA
+- CORS
 - PostgreSQL
