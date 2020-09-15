@@ -66,6 +66,9 @@ public class Usuario implements UserDetails {
 	)
 	private List<Role> roles = new ArrayList<>();
 	
+	private String token = "";
+	
+
 	public Long getId() {
 		return id;
 	}
@@ -179,5 +182,13 @@ public class Usuario implements UserDetails {
 	public boolean isEnabled() {
 
 		return true;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

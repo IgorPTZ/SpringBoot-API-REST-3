@@ -58,15 +58,16 @@ public class JWTTokenAutenticacaoService {
 	public Authentication getAuthentication(HttpServletRequest request) {
 		
 		/* Obtem o token enviado no cabeçalho http */
-		
 		String token = request.getHeader(HEADER_STRING);
 		
 		if(token != null) {
 			
+			String tokenLimpo = token.replace(TOKEN_PREFIX, "");
+			
 			/* Faz a validação do token do usuario na requisicao */
 			String user = Jwts.parser()
 					      .setSigningKey(SECRET)
-						  .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+						  .parseClaimsJws(tokenLimpo)
 						  .getBody()
 						  .getSubject();
 			

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +35,12 @@ public class IndexController {
 	
 	/* Versionamento de API */
 	@GetMapping(value = "v1/{id}", produces = "application/json")
+	
+	/* O CacheEvict  remove todos os caches antigos que nao sao mais atualizados e utilizados */
+	@CacheEvict(value="cache-obter-usuario-v1", allEntries = true)
+	
+	/* O CachePut identifica atualizacoes e adiciona ao cache */
+	@CachePut("cache-obter-usuario-v1")
 	public ResponseEntity<Usuario> obterUsuarioV1(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
@@ -43,6 +52,8 @@ public class IndexController {
 	
 	/* Versionamento de API */
 	@GetMapping(value = "v2/{id}", produces = "application/json")
+	@CacheEvict(value="cache-obter-usuario-v2", allEntries = true)
+	@CachePut("cache-obter-usuario-v2")
 	public ResponseEntity<Usuario> obterUsuarioV2(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
@@ -54,7 +65,9 @@ public class IndexController {
 	
 	
 	@GetMapping(value="/", produces = "application/json")
-	public ResponseEntity<List<Usuario>> obterUsuarios() {
+	@CacheEvict(value="cache-obter-usuario", allEntries = true)
+	@CachePut("cache-obter-usuario")
+	public ResponseEntity<List<Usuario>> obterUsuarios() throws InterruptedException {
 		
 		List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
 		
