@@ -30,6 +30,7 @@ public class ExceptionControl extends ResponseEntityExceptionHandler {
 		String message = "";
 		
 		if(ex instanceof MethodArgumentNotValidException) {
+			
 			List<ObjectError> list = ((MethodArgumentNotValidException) ex).getBindingResult().getAllErrors();
 		
 			for(ObjectError objectError : list) {

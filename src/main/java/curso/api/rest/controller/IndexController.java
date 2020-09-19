@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import curso.api.rest.model.Usuario;
+import curso.api.rest.model.UsuarioDTO;
 import curso.api.rest.repository.UsuarioRepository;
 
 /* Arquitetura REST */
@@ -41,26 +41,26 @@ public class IndexController {
 	
 	/* O CachePut identifica atualizacoes e adiciona ao cache */
 	@CachePut("cache-obter-usuario-v1")
-	public ResponseEntity<Usuario> obterUsuarioV1(@PathVariable (value = "id") Long id) {
+	public ResponseEntity<UsuarioDTO> obterUsuarioV1(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		
 		System.out.println("Old version, for most clients");
 
-		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
+		return new ResponseEntity<UsuarioDTO>(new UsuarioDTO(usuario.get()), HttpStatus.OK);
 	}
 	
 	/* Versionamento de API */
 	@GetMapping(value = "v2/{id}", produces = "application/json")
 	@CacheEvict(value="cache-obter-usuario-v2", allEntries = true)
 	@CachePut("cache-obter-usuario-v2")
-	public ResponseEntity<Usuario> obterUsuarioV2(@PathVariable (value = "id") Long id) {
+	public ResponseEntity<UsuarioDTO> obterUsuarioV2(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		
 		System.out.println("New version, only some clients");
 
-		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
+		return new ResponseEntity<UsuarioDTO>(new UsuarioDTO(usuario.get()), HttpStatus.OK);
 	}
 	
 	
