@@ -9,3 +9,4 @@ Api Rest for learn follows technologies:
 - JPA
 - CORS
 - PostgreSQL
+- ViaCEP (API for retrive address information through zip code)
