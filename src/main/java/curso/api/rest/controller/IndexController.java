@@ -1,5 +1,12 @@
 package curso.api.rest.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +24,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
 
 import curso.api.rest.model.Usuario;
 import curso.api.rest.model.UsuarioDTO;
@@ -76,16 +85,48 @@ public class IndexController {
 	
 	
 	@PostMapping(value = "/", produces = "application/json")
-	public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) throws IOException {
 		
 		for(int i = 0; i < usuario.getTelefones().size(); i ++) {
 			usuario.getTelefones().get(i).setUsuario(usuario);
 		}
 		
+		/* Consumindo API do ViaCEP - Inicio */
+		URL url = new URL("https://viacep.com.br/ws/" + usuario.getCep() + "/json/");
 		
+		URLConnection connection = url.openConnection();
+		
+		InputStream inputStream = connection.getInputStream();
+		
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+		
+		String auxiliar = "";
+		
+		StringBuilder json = new StringBuilder();
+		
+		while((auxiliar = bufferedReader.readLine()) != null) {
+			
+			json.append(auxiliar);
+		}		
+		
+		Usuario usuarioAuxiliar = new Gson().fromJson(json.toString(), Usuario.class);
+		/* Consumindo API do ViaCEP - Fim */
+			
 		String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
 		
 		usuario.setSenha(senhaCriptografada);
+		
+		usuario.setCep(usuarioAuxiliar.getCep());
+		
+		usuario.setLogradouro(usuarioAuxiliar.getLogradouro());
+		
+		usuario.setComplemento(usuarioAuxiliar.getComplemento());
+		
+		usuario.setBairro(usuarioAuxiliar.getBairro());
+		
+		usuario.setLocalidade(usuarioAuxiliar.getLocalidade());
+		
+		usuario.setUf(usuarioAuxiliar.getUf());
 		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		
