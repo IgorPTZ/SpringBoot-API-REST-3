@@ -1,4 +1,4 @@
-package curso.api.rest.controller;
+package api.rest.three.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
-import curso.api.rest.model.Usuario;
-import curso.api.rest.model.UsuarioDTO;
-import curso.api.rest.repository.UsuarioRepository;
+import api.rest.three.model.Usuario;
+import api.rest.three.model.UsuarioDTO;
+import api.rest.three.repository.UsuarioRepository;
 
 /* Arquitetura REST */
 

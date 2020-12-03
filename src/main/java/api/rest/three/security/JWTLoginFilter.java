@@ -1,4 +1,4 @@
-package curso.api.rest.security;
+package api.rest.three.security;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import curso.api.rest.model.Usuario;
+import api.rest.three.model.Usuario;
 
 /* Estabele o gerenciador de token */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {

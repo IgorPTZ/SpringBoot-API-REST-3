@@ -1,4 +1,4 @@
-package curso.api.rest.security;
+package api.rest.three.security;
 
 import java.io.IOException;
 import java.util.Date;
@@ -11,9 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import curso.api.rest.ApplicationContextLoad;
-import curso.api.rest.model.Usuario;
-import curso.api.rest.repository.UsuarioRepository;
+import api.rest.three.ApplicationContextLoad;
+import api.rest.three.model.Usuario;
+import api.rest.three.repository.UsuarioRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

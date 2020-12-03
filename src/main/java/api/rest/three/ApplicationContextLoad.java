@@ -1,4 +1,4 @@
-package curso.api.rest;
+package api.rest.three;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package curso.api.rest.model;
+package api.rest.three.model;
 
 import java.io.Serializable;
 

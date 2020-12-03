@@ -1,4 +1,4 @@
-package curso.api.rest;
+package api.rest.three;
 
 public class ErrorObject {
 	

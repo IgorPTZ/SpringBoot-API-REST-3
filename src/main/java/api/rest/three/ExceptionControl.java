@@ -1,4 +1,4 @@
-package curso.api.rest;
+package api.rest.three;
 
 import java.sql.SQLException;
 import java.util.List;

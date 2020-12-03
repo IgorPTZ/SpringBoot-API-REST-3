@@ -1,4 +1,4 @@
-package curso.api.rest;
+package api.rest.three;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

@@ -1,4 +1,4 @@
-package curso.api.rest.security;
+package api.rest.three.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import curso.api.rest.service.ImplementacaoUserDetailsService;
+import api.rest.three.service.ImplementacaoUserDetailsService;
 
 
 /* Mapeia URL's e endereços. Também autoriza ou bloqueia acessos a URL's */

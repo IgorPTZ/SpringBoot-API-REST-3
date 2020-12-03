@@ -1,4 +1,4 @@
-package curso.api.rest;
+package api.rest.three;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
