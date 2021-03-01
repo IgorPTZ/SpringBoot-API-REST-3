@@ -22,11 +22,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RestController
 @EnableAutoConfiguration
 @EnableCaching
-public class CursospringrestapiApplication implements WebMvcConfigurer{
+public class RestApiThreeApplication implements WebMvcConfigurer{
 
 	public static void main(String[] args) {
 		
-		SpringApplication.run(CursospringrestapiApplication.class, args);
+		SpringApplication.run(RestApiThreeApplication.class, args);
 		//System.out.println(new BCryptPasswordEncoder().encode("123"));
 		//System.out.println(new BCryptPasswordEncoder().encode("321"));
 	}
