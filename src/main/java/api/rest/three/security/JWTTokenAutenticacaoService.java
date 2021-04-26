@@ -50,13 +50,12 @@ public class JWTTokenAutenticacaoService {
 		/* Adiciona no cabeçalho http */
 		response.addHeader(HEADER_STRING, token); /* Ex: Authorization: Bearer token */
 		
-		
 		/* Para atualizar o token presente na tabela de usuario durante um novo login */
 		ApplicationContextLoad.getApplicationContext()
 		.getBean(UsuarioRepository.class).atualizarTokenUser(JWT, username);
 		
 		/* Liberando resposta para porta diferentes da que a API utiliza (Ex: request vinda do browser) */
-		liberacaoCors(response);
+		liberarCors(response);
 		
 		/* Escreve token como resposta no corpo http */
 		response.getWriter().write("{\"Authorization\": \"" + token + "\"}");
@@ -111,12 +110,13 @@ public class JWTTokenAutenticacaoService {
 		}
 
 		
-		liberacaoCors(response);
+		liberarCors(response);
+		
 		return null; /* Retorno para usuario nao autorizado */
 	}
 
 
-	private void liberacaoCors(HttpServletResponse response) {
+	private void liberarCors(HttpServletResponse response) {
 		
 		if(response.getHeader("Access-Control-Allow-Origin") == null) {
 			

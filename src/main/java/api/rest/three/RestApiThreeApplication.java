@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,9 +15,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@EntityScan(basePackages = {"curso.api.rest.model"})
-@ComponentScan(basePackages = {"curso.*"})
-@EnableJpaRepositories(basePackages = {"curso.api.rest.repository"})
+@EntityScan(basePackages = {"api.rest.three.model"})
+@ComponentScan(basePackages = {"api.*"})
+@EnableJpaRepositories(basePackages = {"api.rest.three.repository"})
 @EnableTransactionManagement
 @EnableWebMvc
 @RestController
@@ -27,7 +28,7 @@ public class RestApiThreeApplication implements WebMvcConfigurer{
 	public static void main(String[] args) {
 		
 		SpringApplication.run(RestApiThreeApplication.class, args);
-		//System.out.println(new BCryptPasswordEncoder().encode("123"));
+		//System.out.println(new BCryptPasswordEncoder().encode("teste123"));
 		//System.out.println(new BCryptPasswordEncoder().encode("321"));
 	}
 	
