@@ -28,8 +28,7 @@ public class RestApiThreeApplication implements WebMvcConfigurer{
 	public static void main(String[] args) {
 		
 		SpringApplication.run(RestApiThreeApplication.class, args);
-		//System.out.println(new BCryptPasswordEncoder().encode("teste123"));
-		//System.out.println(new BCryptPasswordEncoder().encode("321"));
+		System.out.println(new BCryptPasswordEncoder().encode("teste123"));
 	}
 	
 	
@@ -39,7 +38,7 @@ public class RestApiThreeApplication implements WebMvcConfigurer{
 		
 		/* Utilizando o CORS para liberar apenas requisições POST, PUT e GET para o cliente localhost:8080 */
 		registry.addMapping("/usuario/**").
-		allowedMethods("POST", "PUT", "GET"). 
+		allowedMethods("POST", "PUT", "GET", "DELETE"). 
 		allowedOrigins("*");
 	}
 }
