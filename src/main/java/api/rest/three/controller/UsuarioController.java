@@ -34,7 +34,7 @@ import api.rest.three.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping(value = "/usuario")
-public class IndexController {
+public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -49,13 +49,13 @@ public class IndexController {
 	
 	/* O CachePut identifica atualizacoes e adiciona ao cache */
 	@CachePut("cache-obter-usuario-v1")
-	public ResponseEntity<UsuarioDTO> obterUsuarioV1(@PathVariable (value = "id") Long id) {
+	public ResponseEntity<Usuario> obterUsuarioV1(@PathVariable (value = "id") Long id) {
 		
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		
 		System.out.println("Old version, for most clients");
 
-		return new ResponseEntity<UsuarioDTO>(new UsuarioDTO(usuario.get()), HttpStatus.OK);
+		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
 	}
 	
 	/* Versionamento de API */
@@ -75,9 +75,18 @@ public class IndexController {
 	@GetMapping(value="/", produces = "application/json")
 	@CacheEvict(value="cache-obter-usuario", allEntries = true)
 	@CachePut("cache-obter-usuario")
-	public ResponseEntity<List<Usuario>> obterUsuarios() throws InterruptedException {
+	public ResponseEntity<List<Usuario>> obterUsuarios() {
 		
 		List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
+		
+		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/obter-usuarios-pelo-nome/{nome}", produces = "application/json")
+	@CachePut("cache-obter-usuario-pelo-nome")
+	public ResponseEntity<List<Usuario>> obterUsuariosPeloNome(@PathVariable("nome") String nome) {
+		
+		List<Usuario> usuarios = usuarioRepository.findUserByNome(nome);
 		
 		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
 	}

@@ -28,7 +28,7 @@ public class RestApiThreeApplication implements WebMvcConfigurer{
 	public static void main(String[] args) {
 		
 		SpringApplication.run(RestApiThreeApplication.class, args);
-		System.out.println(new BCryptPasswordEncoder().encode("teste123"));
+		//System.out.println(new BCryptPasswordEncoder().encode("teste123"));
 	}
 	
 	
