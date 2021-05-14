@@ -27,7 +27,7 @@ public class ExceptionControl extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
-		String message = "";
+		String message = " ";
 		
 		if(ex instanceof MethodArgumentNotValidException) {
 			
@@ -43,7 +43,9 @@ public class ExceptionControl extends ResponseEntityExceptionHandler {
 		}
 		
 		ErrorObject errorObject = new ErrorObject();
+		
 		errorObject.setError(message);
+		
 		errorObject.setCode(status.value() + " ==> " + status.getReasonPhrase());
 		
 		return new ResponseEntity<>(errorObject, headers, status);
@@ -54,7 +56,7 @@ public class ExceptionControl extends ResponseEntityExceptionHandler {
 					   ConstraintViolationException.class,
 					   PSQLException.class,
 					   SQLException.class})
-	protected ResponseEntity<Object> handleExceptionDataEntegry(Exception ex) {
+	protected ResponseEntity<Object> handleExceptionDataIntegry(Exception ex) {
 		
 		String message = "";
 		
@@ -80,7 +82,9 @@ public class ExceptionControl extends ResponseEntityExceptionHandler {
 		}
 		
 		ErrorObject errorObject = new ErrorObject();
+		
 		errorObject.setError(message);
+		
 		errorObject.setCode(HttpStatus.INTERNAL_SERVER_ERROR + " ==> " + HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
 		
 		return new ResponseEntity<>(errorObject, HttpStatus.INTERNAL_SERVER_ERROR);

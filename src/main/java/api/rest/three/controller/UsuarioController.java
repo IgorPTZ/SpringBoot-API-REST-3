@@ -99,42 +99,44 @@ public class UsuarioController {
 			usuario.getTelefones().get(i).setUsuario(usuario);
 		}
 		
-		/* Consumindo API do ViaCEP - Inicio */
-		URL url = new URL("https://viacep.com.br/ws/" + usuario.getCep() + "/json/");
-		
-		URLConnection connection = url.openConnection();
-		
-		InputStream inputStream = connection.getInputStream();
-		
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-		
-		String auxiliar = "";
-		
-		StringBuilder json = new StringBuilder();
-		
-		while((auxiliar = bufferedReader.readLine()) != null) {
+		if(usuario.getCep() != null && !usuario.getCep().isEmpty()) {
+			/* Consumindo API do ViaCEP - Inicio */
+			URL url = new URL("https://viacep.com.br/ws/" + usuario.getCep() + "/json/");
 			
-			json.append(auxiliar);
-		}		
-		
-		Usuario usuarioAuxiliar = new Gson().fromJson(json.toString(), Usuario.class);
-		/* Consumindo API do ViaCEP - Fim */
+			URLConnection connection = url.openConnection();
 			
+			InputStream inputStream = connection.getInputStream();
+			
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+			
+			String auxiliar = "";
+			
+			StringBuilder json = new StringBuilder();
+			
+			while((auxiliar = bufferedReader.readLine()) != null) {
+				
+				json.append(auxiliar);
+			}		
+			
+			Usuario usuarioAuxiliar = new Gson().fromJson(json.toString(), Usuario.class);
+			/* Consumindo API do ViaCEP - Fim */
+			
+			usuario.setCep(usuarioAuxiliar.getCep());
+			
+			usuario.setLogradouro(usuarioAuxiliar.getLogradouro());
+			
+			usuario.setComplemento(usuarioAuxiliar.getComplemento());
+			
+			usuario.setBairro(usuarioAuxiliar.getBairro());
+			
+			usuario.setLocalidade(usuarioAuxiliar.getLocalidade());
+			
+			usuario.setUf(usuarioAuxiliar.getUf());
+		}
+		
 		String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
 		
 		usuario.setSenha(senhaCriptografada);
-		
-		usuario.setCep(usuarioAuxiliar.getCep());
-		
-		usuario.setLogradouro(usuarioAuxiliar.getLogradouro());
-		
-		usuario.setComplemento(usuarioAuxiliar.getComplemento());
-		
-		usuario.setBairro(usuarioAuxiliar.getBairro());
-		
-		usuario.setLocalidade(usuarioAuxiliar.getLocalidade());
-		
-		usuario.setUf(usuarioAuxiliar.getUf());
 		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		
@@ -149,7 +151,7 @@ public class UsuarioController {
 			usuario.getTelefones().get(i).setUsuario(usuario);
 		}
 		
-		Usuario aux = usuarioRepository.findUserByLogin(usuario.getLogin());
+		Usuario aux = usuarioRepository.findById(usuario.getId()).get();
 		
 		/* Caso a senha enviada seja diferente a que se encontra no banco de dados, havera 
 		 * uma atualizacao de senha, e a nova senha sera criptografada e salva no banco de dados */
