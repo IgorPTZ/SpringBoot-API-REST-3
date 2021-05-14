@@ -10,3 +10,5 @@ Api Rest for learn follows technologies:
 - CORS
 - PostgreSQL
 - ViaCEP (API for retrive address information through zip code)
+
+Provide data for this Angular application -> https://github.com/IgorPTZ/Angular-Project
