@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import api.rest.three.model.Usuario;
 import api.rest.three.model.UsuarioDTO;
 import api.rest.three.repository.UsuarioRepository;
+import api.rest.three.service.ImplementacaoUserDetailsService;
 
 /* Arquitetura REST */
 
@@ -38,6 +39,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
 	
 	/* Serviço RESTful */
 	
@@ -139,6 +143,8 @@ public class UsuarioController {
 		usuario.setSenha(senhaCriptografada);
 		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
+		
+		implementacaoUserDetailsService.inserirAcessoPadrao(usuarioSalvo.getId());
 		
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
 	}

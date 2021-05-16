@@ -25,4 +25,11 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
 	@Modifying
 	@Query(nativeQuery = true, value = "update usuario set token = ?1 where login = ?2")
 	void atualizarTokenUser(String token, String login);
+	
+	@Query(nativeQuery = true, value = "SELECT constraint_name from information_schema.constraint_column_usage " + 
+	" WHERE table_name = 'usuarios_role' AND column_name = 'role_id' AND constraint_name <> 'unique_role_user';")
+	String obterNomeDaConstraint();
+	
+	@Query(nativeQuery = true, value="ALTER TABLE usuarios_role DROP CONSTRAINT ?1")
+	void removerConstraint(String nomeDaConstraint);
 }

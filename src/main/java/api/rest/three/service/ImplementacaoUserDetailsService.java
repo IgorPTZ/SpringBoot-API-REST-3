@@ -30,4 +30,9 @@ public class ImplementacaoUserDetailsService implements UserDetailsService {
 		
 		return new User(usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());
 	}
+	
+	public void inserirAcessoPadrao(Long usuarioId) {
+		
+		String nomeDaConstraint = usuarioRepository.obterNomeDaConstraint();
+	}
 }
