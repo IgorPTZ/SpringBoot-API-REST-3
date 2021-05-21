@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 
 import api.rest.three.model.Usuario;
 import api.rest.three.model.UsuarioDTO;
+import api.rest.three.repository.TelefoneRepository;
 import api.rest.three.repository.UsuarioRepository;
 import api.rest.three.service.ImplementacaoUserDetailsService;
 
@@ -39,6 +40,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private TelefoneRepository telefoneRepository;
 	
 	@Autowired
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
@@ -144,7 +148,10 @@ public class UsuarioController {
 		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		
-		implementacaoUserDetailsService.inserirAcessoPadrao(usuarioSalvo.getId());
+		if(usuarioSalvo != null) {
+			
+			implementacaoUserDetailsService.inserirAcessoPadrao(usuarioSalvo.getId());
+		}
 		
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
 	}
@@ -179,5 +186,14 @@ public class UsuarioController {
 		usuarioRepository.deleteById(id);
 		
 		return "Usuario excluido com sucesso!";
+	}
+	
+	
+	@DeleteMapping(value = "/excluir-telefone/{id}", produces = "application/text")
+	public String excluirTelefone(@PathVariable("id") Long id) {
+		
+		telefoneRepository.deleteById(id);
+		
+		return "Telefone excluido com sucesso!";
 	}
 }

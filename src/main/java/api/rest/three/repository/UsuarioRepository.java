@@ -30,6 +30,9 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
 	" WHERE table_name = 'usuarios_role' AND column_name = 'role_id' AND constraint_name <> 'unique_role_user';")
 	String obterNomeDaConstraint();
 	
-	@Query(nativeQuery = true, value="ALTER TABLE usuarios_role DROP CONSTRAINT ?1")
-	void removerConstraint(String nomeDaConstraint);
+	
+	@Transactional
+	@Modifying
+	@Query(nativeQuery = true, value="INSERT INTO usuarios_role (usuario_id, role_id) VALUES (?1, (SELECT id FROM role WHERE nome_role = 'ROLE_USER'))")
+	void inserirRolePadrao(Long usuarioId);
 }
