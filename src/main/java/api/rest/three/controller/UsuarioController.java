@@ -12,6 +12,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -83,11 +86,11 @@ public class UsuarioController {
 	@GetMapping(value="/", produces = "application/json")
 	@CacheEvict(value="cache-obter-usuario", allEntries = true)
 	@CachePut("cache-obter-usuario")
-	public ResponseEntity<List<Usuario>> obterUsuarios() {
+	public ResponseEntity<Page<Usuario>> obterUsuarios() {
+				
+		Page<Usuario> usuarios = usuarioRepository.findAll(PageRequest.of(0, 5, Sort.by("nome")));
 		
-		List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
-		
-		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
+		return new ResponseEntity<Page<Usuario>>(usuarios, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/obter-usuarios-pelo-nome/{nome}", produces = "application/json")
