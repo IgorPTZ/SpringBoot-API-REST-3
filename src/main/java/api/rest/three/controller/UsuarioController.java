@@ -86,9 +86,19 @@ public class UsuarioController {
 	@GetMapping(value="/", produces = "application/json")
 	@CacheEvict(value="cache-obter-usuario", allEntries = true)
 	@CachePut("cache-obter-usuario")
-	public ResponseEntity<Page<Usuario>> obterUsuarios() {
+	public ResponseEntity<List<Usuario>> obterUsuarios() {
 				
-		Page<Usuario> usuarios = usuarioRepository.findAll(PageRequest.of(0, 5, Sort.by("nome")));
+		List<Usuario> usuarios = usuarioRepository.findAll(Sort.by("nome"));
+		
+		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/pagina/{pagina}", produces = "application/json")
+	@CacheEvict(value="cache-obter-usuarios-paginados", allEntries = true)
+	@CachePut("cache-obter-usuarios-paginados")
+	public ResponseEntity<Page<Usuario>> obterUsuariosPaginados(@PathVariable (value = "pagina") Long pagina){
+		
+		Page<Usuario> usuarios = usuarioRepository.findAll(PageRequest.of(pagina.intValue(), 5, Sort.by("nome")));
 		
 		return new ResponseEntity<Page<Usuario>>(usuarios, HttpStatus.OK);
 	}
