@@ -105,11 +105,26 @@ public class UsuarioController {
 	
 	@GetMapping(value="/obter-usuarios-pelo-nome/{nome}", produces = "application/json")
 	@CachePut("cache-obter-usuario-pelo-nome")
-	public ResponseEntity<List<Usuario>> obterUsuariosPeloNome(@PathVariable("nome") String nome) {
+	public ResponseEntity<Page<Usuario>> obterUsuariosPeloNome(@PathVariable("nome") String nome) {
 		
-		List<Usuario> usuarios = usuarioRepository.findUserByNome(nome);
+		PageRequest pageRequest = null;
 		
-		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
+		Page<Usuario> usuarios  = null;
+		
+		if(nome == null || (nome != null & nome.trim().isEmpty()) || nome.equalsIgnoreCase("undefined")) {
+			
+			pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
+			
+			usuarios = usuarioRepository.findAll(pageRequest);
+		}
+		else {
+			
+			pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
+			
+			usuarios = usuarioRepository.obterUsuariosPeloNome(nome, pageRequest);
+		}
+				
+		return new ResponseEntity<Page<Usuario>>(usuarios, HttpStatus.OK);
 	}
 	
 	

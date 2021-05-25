@@ -85,7 +85,7 @@ public class JWTTokenAutenticacaoService {
 					Usuario usuario = ApplicationContextLoad
 							          .getApplicationContext()
 									  .getBean(UsuarioRepository.class)
-									  .findUserByLogin(user);
+									  .obterUsuarioPorLogin(user);
 					
 					if(usuario != null) {
 						
