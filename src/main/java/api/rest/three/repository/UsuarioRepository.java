@@ -2,6 +2,8 @@ package api.rest.three.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,6 +41,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	
 	default Page<Usuario> obterUsuariosPeloNome(String nome, PageRequest pageRequest) {
 		
-		return null;
+		Usuario usuario = new Usuario(nome);
+		
+		// Configurando pesquisa de usuarios paginados por nome
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				                                      .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+		
+		Example<Usuario> example = Example.of(usuario, exampleMatcher);
+		
+		Page<Usuario> usuarios = findAll(example, pageRequest);
+		
+		return usuarios;
 	}
 }

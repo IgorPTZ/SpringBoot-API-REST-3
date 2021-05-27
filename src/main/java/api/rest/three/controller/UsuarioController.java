@@ -104,6 +104,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping(value="/obter-usuarios-pelo-nome/{nome}", produces = "application/json")
+	@CacheEvict(value="cache-obter-usuario-pelo-nome", allEntries = true)
 	@CachePut("cache-obter-usuario-pelo-nome")
 	public ResponseEntity<Page<Usuario>> obterUsuariosPeloNome(@PathVariable("nome") String nome) {
 		
