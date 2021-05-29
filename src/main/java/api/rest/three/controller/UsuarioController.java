@@ -96,7 +96,7 @@ public class UsuarioController {
 	@GetMapping(value="/pagina/{pagina}", produces = "application/json")
 	@CacheEvict(value="cache-obter-usuarios-paginados", allEntries = true)
 	@CachePut("cache-obter-usuarios-paginados")
-	public ResponseEntity<Page<Usuario>> obterUsuariosPaginados(@PathVariable (value = "pagina") Long pagina){
+	public ResponseEntity<Page<Usuario>> obterUsuariosPaginados(@PathVariable(value = "pagina") Long pagina){
 		
 		Page<Usuario> usuarios = usuarioRepository.findAll(PageRequest.of(pagina.intValue(), 5, Sort.by("nome")));
 		
@@ -104,27 +104,40 @@ public class UsuarioController {
 	}
 	
 	@GetMapping(value="/obter-usuarios-pelo-nome/{nome}", produces = "application/json")
-	@CacheEvict(value="cache-obter-usuario-pelo-nome", allEntries = true)
-	@CachePut("cache-obter-usuario-pelo-nome")
+	@CacheEvict(value="cache-obter-usuarios-pelo-nome", allEntries = true)
+	@CachePut("cache-obter-usuarios-pelo-nome")
 	public ResponseEntity<Page<Usuario>> obterUsuariosPeloNome(@PathVariable("nome") String nome) {
-		
-		PageRequest pageRequest = null;
 		
 		Page<Usuario> usuarios  = null;
 		
 		if(nome == null || (nome != null & nome.trim().isEmpty()) || nome.equalsIgnoreCase("undefined")) {
 			
-			pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
-			
-			usuarios = usuarioRepository.findAll(pageRequest);
+			usuarios = usuarioRepository.findAll(PageRequest.of(0, 5, Sort.by("nome")));
 		}
 		else {
 			
-			pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
-			
-			usuarios = usuarioRepository.obterUsuariosPeloNome(nome, pageRequest);
+			usuarios = usuarioRepository.obterUsuariosPeloNome(nome, PageRequest.of(0, 5, Sort.by("nome")));
 		}
 				
+		return new ResponseEntity<Page<Usuario>>(usuarios, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/obter-usuarios-paginados-pelo-nome/{nome}/pagina/{pagina}", produces = "application/json")
+	@CacheEvict(value="cache-obter-usuarios-paginados-pelo-nome", allEntries = true)
+	@CachePut("cache-obter-usuarios-paginados-pelo-nome")
+	public ResponseEntity<Page<Usuario>> obterUsuariosPaginadosPeloNome(@PathVariable(value = "nome") String nome, @PathVariable(value = "pagina") Long pagina) {
+		
+		Page<Usuario> usuarios = null;
+		
+		if(nome == null || (nome != null && nome.trim().isEmpty() || nome.equalsIgnoreCase("undefined"))) {
+						
+			usuarios = usuarioRepository.findAll(PageRequest.of(pagina.intValue(), 5, Sort.by("nome")));
+		}
+		else {
+			
+			usuarios = usuarioRepository.obterUsuariosPeloNome(nome, PageRequest.of(pagina.intValue(), 5, Sort.by("nome")));
+		}
+		
 		return new ResponseEntity<Page<Usuario>>(usuarios, HttpStatus.OK);
 	}
 	
@@ -210,7 +223,7 @@ public class UsuarioController {
 	
 	
 	@DeleteMapping(value = "/{id}", produces = "application/text")
-	public String excluirUsuario(@PathVariable("id") Long id) {
+	public String excluirUsuario(@PathVariable(value = "id") Long id) {
 		
 		usuarioRepository.deleteById(id);
 		
