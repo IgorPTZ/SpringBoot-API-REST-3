@@ -2,6 +2,7 @@ package api.rest.three.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,13 +15,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.UniqueConstraint;
 
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -68,6 +73,13 @@ public class Usuario implements UserDetails {
 	)
 	private List<Role> roles = new ArrayList<>();
 	
+	
+	// A annotation @JsonFormat especifica o formato da data que será retornado no JSON
+	@JsonFormat(pattern="dd/MM/yyyy")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(iso = ISO.DATE, pattern="dd/MM/yyyy")
+	private Date dataDeNascimento;
+	
 	private String token = "";
 	
 	private String cep;
@@ -86,8 +98,7 @@ public class Usuario implements UserDetails {
 		
 	}
 	
-	public Usuario(String nome) {
-		
+	public Usuario(String nome) {		
 		this.nome = nome;
 	}
 
@@ -139,6 +150,14 @@ public class Usuario implements UserDetails {
 		this.telefones = telefones;
 	}
 	
+	public Date getDataDeNascimento() {
+		return dataDeNascimento;
+	}
+
+	public void setDataDeNascimento(Date dataDeNascimento) {
+		this.dataDeNascimento = dataDeNascimento;
+	}
+
 	public String getToken() {
 		return token;
 	}
@@ -197,7 +216,7 @@ public class Usuario implements UserDetails {
 
 	/* Acessos do usuario. Ex: ROLE_ADMIN, ROLE_VISITANTE */
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	public Collection<Role> getAuthorities() {
 		
 		return roles;
 	}
