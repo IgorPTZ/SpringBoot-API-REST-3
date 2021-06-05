@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,6 +80,9 @@ public class Usuario implements UserDetails {
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(iso = ISO.DATE, pattern="dd/MM/yyyy")
 	private Date dataDeNascimento;
+	
+	@ManyToOne
+	private Profissao profissao;
 	
 	private String token = "";
 	
@@ -156,6 +160,14 @@ public class Usuario implements UserDetails {
 
 	public void setDataDeNascimento(Date dataDeNascimento) {
 		this.dataDeNascimento = dataDeNascimento;
+	}
+	
+	public Profissao getProfissao() {
+		return profissao;
+	}
+
+	public void setProfissao(Profissao profissao) {
+		this.profissao = profissao;
 	}
 
 	public String getToken() {

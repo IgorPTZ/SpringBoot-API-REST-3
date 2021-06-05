@@ -40,5 +40,9 @@ public class RestApiThreeApplication implements WebMvcConfigurer{
 		registry.addMapping("/usuario/**").
 		allowedMethods("POST", "PUT", "GET", "DELETE"). 
 		allowedOrigins("*");
+		
+		registry.addMapping("/profissao/**").
+		allowedMethods("POST", "PUT", "GET", "DELETE").
+		allowedOrigins("*");
 	}
 }
