@@ -38,11 +38,15 @@ public class RestApiThreeApplication implements WebMvcConfigurer{
 		
 		/* Utilizando o CORS para liberar apenas requisições POST, PUT e GET para o cliente localhost:8080 */
 		registry.addMapping("/usuario/**").
-		allowedMethods("POST", "PUT", "GET", "DELETE"). 
+		allowedMethods("*"). 
 		allowedOrigins("*");
 		
 		registry.addMapping("/profissao/**").
-		allowedMethods("POST", "PUT", "GET", "DELETE").
+		allowedMethods("*").
+		allowedOrigins("*");
+		
+		registry.addMapping("/recuperar/**").
+		allowedMethods("*").
 		allowedOrigins("*");
 	}
 }
