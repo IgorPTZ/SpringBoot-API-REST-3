@@ -39,6 +39,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query(nativeQuery = true, value="INSERT INTO usuarios_role (usuario_id, role_id) VALUES (?1, (SELECT id FROM role WHERE nome_role = 'ROLE_USER'))")
 	void inserirRolePadrao(Long usuarioId);
 	
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE usuario set senha = ?1 WHERE id = ?2", nativeQuery = true)
+	void modificarSenha(String senha,  Long usuarioId);
+	
 	default Page<Usuario> obterUsuariosPeloNome(String nome, PageRequest pageRequest) {
 		
 		Usuario usuario = new Usuario(nome);
