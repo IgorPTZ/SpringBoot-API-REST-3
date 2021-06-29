@@ -117,10 +117,11 @@
 			<version>1.6.2</version>
 		</dependency>
 		
+		<!-- Versao da biblioteca tem que ser igual a versao do TIBCO Jaspersoft Studio -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.8.0</version>
+			<version>6.16.0</version>
 		</dependency>
 	</dependencies>
 

@@ -9,6 +9,9 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -34,6 +37,7 @@ import api.rest.three.model.UsuarioDTO;
 import api.rest.three.repository.TelefoneRepository;
 import api.rest.three.repository.UsuarioRepository;
 import api.rest.three.service.ImplementacaoUserDetailsService;
+import api.rest.three.service.RelatorioService;
 
 /* Arquitetura REST */
 
@@ -49,6 +53,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
+	
+	@Autowired
+	private RelatorioService relatorioService;
 	
 	/* Serviço RESTful */
 	
@@ -237,5 +244,15 @@ public class UsuarioController {
 		telefoneRepository.deleteById(id);
 		
 		return "Telefone excluido com sucesso!";
+	}
+	
+	@GetMapping(value = "/baixar-relatorio", produces = "application/text")
+	public ResponseEntity<String> baixarRelatorio(HttpServletRequest httpServletRequest) {
+		
+		byte[] pdf = relatorioService.gerarRelatorio("relatorio-usuario", httpServletRequest.getServletContext());
+		
+		String pdfEmBase64 = "data:application/pdf;base64," + Base64.encodeBase64String(pdf);
+		
+		return new ResponseEntity<String>(pdfEmBase64, HttpStatus.OK);
 	}
 }
