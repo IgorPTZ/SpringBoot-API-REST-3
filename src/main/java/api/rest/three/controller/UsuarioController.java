@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import api.rest.three.model.Relatorio;
 import api.rest.three.model.Usuario;
 import api.rest.three.model.UsuarioDTO;
 import api.rest.three.repository.TelefoneRepository;
@@ -248,6 +249,16 @@ public class UsuarioController {
 	
 	@GetMapping(value = "/baixar-relatorio", produces = "application/text")
 	public ResponseEntity<String> baixarRelatorio(HttpServletRequest httpServletRequest) {
+		
+		byte[] pdf = relatorioService.gerarRelatorio("relatorio-usuario", httpServletRequest.getServletContext());
+		
+		String pdfEmBase64 = "data:application/pdf;base64," + Base64.encodeBase64String(pdf);
+		
+		return new ResponseEntity<String>(pdfEmBase64, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/baixar-relatorio-parametrizado", produces = "application/text")
+	public ResponseEntity<String> baixarRelatorioParametrizado(HttpServletRequest httpServletRequest, @RequestBody Relatorio relatorio) {
 		
 		byte[] pdf = relatorioService.gerarRelatorio("relatorio-usuario", httpServletRequest.getServletContext());
 		
