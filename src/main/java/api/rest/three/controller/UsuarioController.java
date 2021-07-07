@@ -6,7 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -260,10 +263,33 @@ public class UsuarioController {
 	@PostMapping(value = "/baixar-relatorio-parametrizado", produces = "application/text")
 	public ResponseEntity<String> baixarRelatorioParametrizado(HttpServletRequest httpServletRequest, @RequestBody Relatorio relatorio) {
 		
-		byte[] pdf = relatorioService.gerarRelatorio("relatorio-usuario", httpServletRequest.getServletContext());
-		
-		String pdfEmBase64 = "data:application/pdf;base64," + Base64.encodeBase64String(pdf);
-		
-		return new ResponseEntity<String>(pdfEmBase64, HttpStatus.OK);
+		try {
+			
+			SimpleDateFormat formatoDoCliente = new SimpleDateFormat("dd/MM/yyyy");
+			
+			SimpleDateFormat formatoDoJasper = new SimpleDateFormat("yyyy-MM-dd");
+			
+			String dataInicio = formatoDoJasper.format(formatoDoCliente.parse(relatorio.getDataInicio()));
+			
+			String dataFim = formatoDoJasper.format(formatoDoCliente.parse(relatorio.getDataFim()));
+			
+			Map<String, Object> parametros = new HashMap<String, Object>();
+			
+			parametros.put("DATA_INICIO", dataInicio);
+					
+			parametros.put("DATA_FIM", dataFim);
+			
+			byte[] pdf = relatorioService.gerarRelatorioParametrizado("relatorio-usuario-parametrizado", parametros, httpServletRequest.getServletContext());
+			
+			String pdfEmBase64 = "data:application/pdf;base64," + Base64.encodeBase64String(pdf);
+			
+			return new ResponseEntity<String>(pdfEmBase64, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			return new ResponseEntity<String>("Falha ao obter relatorio parametrizado", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

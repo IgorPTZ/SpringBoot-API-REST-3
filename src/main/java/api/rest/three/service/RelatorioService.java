@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -41,7 +42,39 @@ public class RelatorioService implements Serializable {
 					                                               connection);
 			
 			/* Exporta o PDF em forma de bytes, para que seja possivel fazer o download */
+			byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
 			
+			connection.close();
+			
+			return pdf;
+		}
+		catch(Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public byte[] gerarRelatorioParametrizado(String nomeDoRelatorio,
+			                                  Map<String, Object> parametros,
+			                                  ServletContext servletContext) {
+		
+		try {
+			
+			/* Obtem a conexao com o banco de dados */
+			Connection connection = jdbcTemplate.getDataSource().getConnection();
+			
+			/* Carrega o caminho do arquivo Jasper */
+			String caminhoDoArquivoJasper = servletContext.getRealPath("relatorios") +
+					                        File.separator + nomeDoRelatorio + ".jasper";
+			
+			/* Gera o relatorio com os dados */
+			JasperPrint jasperPrint = JasperFillManager.fillReport(caminhoDoArquivoJasper,
+					                                               parametros,
+					                                               connection);
+			
+			/* Exporta o PDF em forma de bytes, para que seja possivel fazer o download */
 			byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
 			
 			connection.close();
