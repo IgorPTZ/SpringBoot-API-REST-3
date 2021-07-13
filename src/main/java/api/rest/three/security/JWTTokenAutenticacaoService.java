@@ -103,10 +103,9 @@ public class JWTTokenAutenticacaoService {
 		}
 		catch(ExpiredJwtException e) {
 			
-			try {
-				
-				response.getOutputStream().print("Token expirado! Faca o login novamente.");
-			} catch (IOException e1) {}
+			liberarCors(response);
+			
+			return null;
 		}
 
 		
